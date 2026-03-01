@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Men's Outfit Gallery</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #0f1115;
+  color: #f1f1f1;
+}
+
+.container {
+  max-width: 450px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #e0e0e0;
+}
+
+.card {
+  background: #1a1d24;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+select, button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  border: none;
+}
+
+select {
+  background: #2a2f3a;
+  color: white;
+}
+
+button {
+  background: #cfa24a;
+  color: black;
+  font-weight: bold;
+}
+
+.gallery {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.gallery img {
+  width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Full screen */
+#fullView {
+  display: none;
+  position: fixed;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+}
+
+#fullView img {
+  width: 90%;
+  max-width: 500px;
+  border-radius: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>MEN'S OUTFIT GALLERY</h1>
+
+<div class="card">
+<select id="climate">
+  <option value="">Select Climate</option>
+  <option>Summer</option>
+  <option>Winter</option>
+  <option>Rainy</option>
+</select>
+
+<select id="occasion">
+  <option value="">Select Occasion</option>
+  <option>Date</option>
+  <option>Casual</option>
+  <option>Formal</option>
+  <option>Business</option>
+</select>
+
+<select id="place">
+  <option value="">Select Place</option>
+  <option>Coffee Shop</option>
+  <option>Office</option>
+  <option>College</option>
+  <option>Restaurant</option>
+</select>
+
+<button onclick="loadImages()">Show Outfits</button>
+</div>
+
+<div class="gallery" id="gallery"></div>
+</div>
+
+<div id="fullView" onclick="closeFullView()">
+  <img id="fullImage">
+</div>
+
+<script>
+let currentImages = [];
+
+function loadImages() {
+  const occasion = document.getElementById("occasion").value;
+  const place = document.getElementById("place").value;
+
+  if (!occasion || !place) {
+    alert("Please select Occasion and Place");
+    return;
+  }
+
+  // build prefix like coffee-date
+  const prefix = place.toLowerCase().replace(/\s/g,"") + "-" + occasion.toLowerCase();
+
+  const gallery = document.getElementById("gallery");
+  gallery.innerHTML = "";
+  currentImages = [];
+
+  const totalImages = 10; // change if you have more
+
+  for (let i = 1; i <= totalImages; i++) {
+    const src = `${prefix}0${i}.jpg`;
+
+    const img = document.createElement("img");
+    img.src = src;
+
+    img.onerror = function() {
+      this.style.display = "none";
+    };
+
+    img.onclick = function() {
+      openFullView(src);
+    };
+
+    gallery.appendChild(img);
+    currentImages.push(src);
+  }
+}
+
+function openFullView(src) {
+  document.getElementById("fullImage").src = src;
+  document.getElementById("fullView").style.display = "flex";
+}
+
+function closeFullView() {
+  document.getElementById("fullView").style.display = "none";
+}
+</script>
+
+</body>
+</html>
